@@ -13,7 +13,7 @@ class Bandit():
 	def bandit(self):
 		print "tt"
 		self.a=[]
-		means=[0.2,-0.8,1.5,0.5,1.2,-1.5,-0.2,-1.0,1.0,-0.5]
+		means=[0.2,-0.8,1.5,0.4,1.2,-1.5,-0.1,-1.0,0.8,-0.5]
 		for i in range(10):
 			self.a.append(self.gaussian(means[i]))
 		self.trials()
@@ -21,13 +21,13 @@ class Bandit():
 	def trials(self):
 		print "tt"
 		armcount=[0 for i in range(10)]	
-		reward=[0 for i in range(1000)]
+		reward=[0 for i in range(1,1001)]
 		for j in range(2000):
 			Q=[0 for i in range(10)]
 			count=[0 for i in range(10)]
 			
-			
-			for i in range(1000):
+			Reward=[0 for i in range(1001)]
+			for i in range(1,1001):
 				arm=[j for j in range(10)]
 				maxvalue=Q.index(max(Q))
 				del arm[maxvalue]
@@ -40,19 +40,22 @@ class Bandit():
 
 				Rt=self.a[maxvalueE][randint(0,999)]
 				Q[maxvalueE]=Q[maxvalueE]+1/count[maxvalueE]*(Rt-Q[maxvalueE])
-				reward[i]=Rt+reward[i]
+				Reward[i]=(Rt+Reward[i-1])/i;
+			reward=[x+y for x,y in zip(reward,Reward)]
 			
 		reward=[i/2000 for i in reward]
-		plt.plot(reward,'r')
+		plt.plot(reward,'r')	
 		print armcount
 		
 
 		armcount=[0 for i in range(10)]
-		reward=[0 for i in range(1000)]
+		reward=[0 for i in range(1001)]
 		for j in range(2000):
 			Q=[0 for i in range(10)]	
 			count=[0 for i in range(10)]
-			for i in range(1000):
+			Reward=[0 for i in range(1001)]
+
+			for i in range(1,1001):
 				#a=[j for j in range(10)]
 				maxvalueE=Q.index(max(Q))
 				#del a[maxvalue]
@@ -66,7 +69,8 @@ class Bandit():
 
 				Rt=self.a[maxvalueE][randint(0,999)]
 				Q[maxvalueE]=Q[maxvalueE]+1/count[maxvalueE]*(Rt-Q[maxvalueE])
-				reward[i]=Rt+reward[i]
+				Reward[i]=(Rt+Reward[i-1])/i
+			reward=[x+y for x,y in zip(reward,Reward)]
 		#plt.hist(reward,1000,normed=True)
 		reward=[i/2000 for i in reward]
 		plt.plot(reward,'g')
