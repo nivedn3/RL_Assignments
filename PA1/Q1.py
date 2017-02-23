@@ -18,7 +18,7 @@ class Bandit():
 		self.a=[]
 		means=[0.2,-0.8,1.55,0.4,1.2,-1.5,-0.1,-1.0,0.8,-0.5]
 		for i in range(10):
-			self.a.append(np.random.normal(means[i],1,10000))
+			self.a.append(np.random.normal(0,1,10000)+means[i])
 		self.trials()
 
 
@@ -33,7 +33,7 @@ class Bandit():
 			#Q=np.array(Q)
 			count=[0 for i in range(10)]
 			count=np.array(count)
-			for i in range(1000):
+			for op in range(1000):
 				maxvalue=Q.index(max(Q))
 				
 				k=[maxvalue,randint(0,9)]
@@ -47,10 +47,11 @@ class Bandit():
 				armcount[maxvalueE]=armcount[maxvalueE]+1
 
 				Rt=self.a[maxvalueE][randint(0,9999)]
+				print Rt
 				#print Rt
 
 				Q[maxvalueE]=Q[maxvalueE]+1/count[maxvalueE]*(Rt-Q[maxvalueE])
-				reward[i]=reward[i]+Rt
+				reward[op]=reward[op]+Rt
 				
 		reward=np.array(reward)
 		reward=reward/2000
