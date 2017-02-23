@@ -7,43 +7,40 @@ import sys
 
 class SF():
 	def __init__(self):
-		self.softmax()
+		self.reward_gaussians()
 
-	def softmax(self):
+	def reward_gaussians(self):
 		self.arms=[]
 		means=[0.2,-0.8,1.55,0.4,1.2,-1.5,-0.1,-1.0,0.8,-0.5]
 		for i in range(10):
 			self.arms.append(np.random.normal(means[i],1,10000))
 		self.trials()
 
-	def pi(self,H):
+	def softmax(self,Q,Temp):
 		Probability=[]
 		sum=0
 		for j in range(10):
-			sum=sum+np.exp(H[j])
+			sum=sum+np.exp(Q[j]/Temp)
 		for i in range(10):
-			Probability.append(np.exp(H[i])/sum)
+			Probability.append(np.exp(Q[i]/Temp)/sum)
 		return Probability
 	def trials(self):
 		reward=[0 for i in range(1000)]
-		alpha=2
-		for outer in range(20):
-			H=[0 for i in range(10)]
-			arms=[i for i in range(10)]
-			Return_mean=0
-			for inner in range(1000):
-				Pr=self.pi(H)				
-				maxvalueE=choice(arms,p=Pr)
+		arms=[i for i in range(10)]
+
+		for outer in range(2000):
+			Q=[0 for i in range(10)]
+			count=[0 for i in range(10)]
+
+			for inner in range(1000):		
+				Probability=self.softmax(Q,0.1)
+				maxvalueE=choice(arms,p=Probability)
+				count[maxvalueE]=count[maxvalueE]+1
 				Return=self.arms[maxvalueE][randint(0,9999)]
+				Q[maxvalueE]=Q[maxvalueE]+(Return-Q[maxvalueE])/count[maxvalueE]
 				reward[inner]=reward[inner]+Return
-				#Return_mean=(Return_mean*(inner)+Return)/(inner+1)
-				Return_mean=0
-				H[maxvalueE]=H[maxvalueE]-alpha*(Return - Return_mean)*(1-Pr[maxvalueE])
-				for i in range(10):
-					if i!=maxvalueE:
-						H[i]=H[i]-alpha*(Return - Return_mean)*Pr[i]
 		reward=np.array(reward)
-		reward=reward/20
+		reward=reward/2000
 		plt.plot(reward,'r')	
 		plt.show()
 
