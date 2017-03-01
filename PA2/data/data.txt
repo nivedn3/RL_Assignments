@@ -3,3 +3,25 @@ Radiation, at its most basic, is simply waves or sub-atomic particles that trans
 Fortunately for us, Earth’s natural protections block all but the most energetic of these particles from reaching the surface. A huge magnetic bubble, called the magnetosphere, which deflects the vast majority of these particles, protects our planet. And our atmosphere subsequently absorbs the majority of particles that do make it through this bubble. Importantly, since the International Space Station (ISS) is in low-Earth orbit within the magnetosphere, it also provides a large measure of protection for our astronauts.
 
 A human mission to Mars means sending astronauts into interplanetary space for a minimum of a year, even with a very short stay on the Red Planet. Nearly all of that time, they will be outside the magnetosphere, exposed to the harsh radiation environment of space. Mars has no global magnetic field to deflect energetic particles, and its atmosphere is much thinner than Earth’s, so they'll get only minimal protection even on the surface of Mars.
+
+Throughout the entire trip, astronauts must be protected from two sources of radiation. The first comes from the sun, which regularly releases a steady stream of solar particles, as well as occasional larger bursts in the wake of giant explosions, such as solar flares and coronal mass ejections, on the sun. These energetic particles are almost all protons, and, though the sun releases an unfathomably large number of them, the proton energy is low enough that they can almost all be physically shielded by the structure of the spacecraft.
+
+The second source of energetic particles is harder to shield. These particles come from galactic cosmic rays, often known as GCRs. They’re particles accelerated to near the speed of light that shoot into our solar system from other stars in the Milky Way or even other galaxies. Like solar particles, galactic cosmic rays are mostly protons. However, some of them are heavier elements, ranging from helium up to the heaviest elements. These more energetic particles can knock apart atoms in the material they strike, such as in the astronaut, the metal walls of a spacecraft, habitat, or vehicle, causing sub-atomic particles to shower into the structure. This secondary radiation, as it is known, can reach a dangerous level.
+
+
+There are two ways to shield from these higher-energy particles and their secondary radiation: use a lot more mass of traditional spacecraft materials, or use more efficient shielding materials.
+
+The sheer volume of material surrounding a structure would absorb the energetic particles and their associated secondary particle radiation before they could reach the astronauts. However, using sheer bulk to protect astronauts would be prohibitively expensive, since more mass means more fuel required to launch.
+
+
+
+Some physical ways to shield radiations
+
+
+Using materials that shield more efficiently would cut down on weight and cost, but finding the right material takes research and ingenuity. NASA is currently investigating a handful of possibilities that could be used in anything from the spacecraft to the Martian habitat to space suits.
+
+“The best way to stop particle radiation is by running that energetic particle into something that’s a similar size,” said Pellish. “Otherwise, it can be like you’re bouncing a tricycle off a tractor-trailer.”
+
+Because protons and neutrons are similar in size, one element blocks both extremely well—hydrogen, which most commonly exists as just a single proton and an electron. Conveniently, hydrogen is the most abundant element in the universe, and makes up substantial parts of some common compounds, such as water and plastics like polyethylene. Engineers could take advantage of already-required mass by processing the astronauts’ trash into plastic-filled tiles used to bolster radiation protection. Water, already required for the crew, could be stored strategically to create a kind of radiation storm shelter in the spacecraft or habitat. However, this strategy comes with some challenges—the crew would need to use the water and then replace it with recycled water from the advanced life support systems.
+
+Polyethylene, the same plastic commonly found in water bottles and grocery bags, also has potential as a candidate for radiation shielding. It is very high in hydrogen and fairly cheap to produce—however, it’s not strong enough to build a large structure, especially a spacecraft, which goes through high heat and strong forces during launch. And adding polyethylene to a metal structure would add quite a bit of mass, meaning that more fuel would be required for launch.
