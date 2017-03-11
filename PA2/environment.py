@@ -16,15 +16,16 @@ class puddle_world(Environment):
 	WORLD_GOAL = 10
 	Start_states=[[5,0],[6,0],[10,0],[11,0]]
 	Action_probab = 0.1
+	self.g=0
 
 	def env_init(self):
-		self.map=[  [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 10],
+		self.map=[  [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, self.g],
 					[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 ],
-					[0 , 0 , 0 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 ,10 , 0, 0 ],
+					[0 , 0 , 0 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 , self.g , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-2 ,-2 ,-2 ,-1 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-3 ,-2 ,-1 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-2 ,-2 ,-1 , 0 , 0, 0 ],
-					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-2 ,10 ,-1 , 0 , 0, 0 ],
+					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-2 , self.g ,-1 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-2 ,-2 ,-1 , 0 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-1 ,-1 ,-1 ,-1 , 0 , 0 , 0, 0 ],
 					[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 ],
@@ -60,6 +61,15 @@ class puddle_world(Environment):
 		Reward.terminal=self.goalcheck()
 
 		return Reward
+
+	def env_cleanup(self):
+		pass
+
+	def env_message(self,Message):
+
+		if Message.startswith("set-goalstates"):
+			self.g = Message.split(" ")[1]
+
 
 	#getting the state after making the 2-d list to 1-d
 	def rolloutstate(self):
@@ -116,10 +126,6 @@ class puddle_world(Environment):
 		else:
 			return False 
 
+if __name_ == "__main__":
+	EnvironmentLoader.loadEnvironment(puddle_world)
 
-
-
-
-
-
-		
