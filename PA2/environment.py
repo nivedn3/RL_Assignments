@@ -12,11 +12,10 @@ from rlglue.types import Reward_observation_terminal
 
 
 class puddle_world(Environment):
-	WORLD_WHITE=0
-	WORLD_BLACK=-3
-	WORLD_DARK_GREY=-2
-	WORLD_GREY=-1
+
+	WORLD_GOAL = 10
 	Start_states=[[5,0],[6,0],[10,0],[11,0]]
+	Action_probab = 0.1
 
 	def env_init(self):
 		self.map=[  [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 10],
@@ -53,19 +52,72 @@ class puddle_world(Environment):
 		self.updatePosition(thisAction.intArray[0])
 
 		Obs=Observation()
-		Obs.intArray=[self.calculateFlatState()]
+		Obs.intArray=[self.rolloutstate()]
 
 		Reward=Reward_observation_terminal()
-		Reward.r=self.calculateReward()
-		Reward.o=theObs
-		Reward.terminal=self.checkCurrentTerminal()
+		Reward.r=self.current_reward()
+		Reward.o=Obs
+		Reward.terminal=self.goalcheck()
 
 		return Reward
 
-	def calculateFlatState(self):
+	#getting the state after making the 2-d list to 1-d
+	def rolloutstate(self):
 
 		numrows=len(self.map)
 		return self.presentCol* numrows + self.presentRow
+
+	#updating the position
+	def updatePosition(self,thisAction):
+
+		#To account for the action stochasticity 
+		if random.random() < Action_probab :
+			thisAction = random.randint(0,3)
+
+		column = self.presentCol
+		row = self.presentRow
+
+		#move down
+		if(thisAction == 0):
+			column=column + 1;
+
+		#move right
+		if(thisAction == 1):
+			row=row + 1
+		
+		#move up
+		if(thisAction == 2):
+			column=column - 1
+		#move down
+		if(thisAction == 3):
+			row=row - 1
+
+		self.presentCol,self.presentRow = self.finalcheck(column,row)
+
+	#finalising the position after checking whether the agent goes out of bounds
+	def finalcheck(self,column,row):
+		
+		if (row < 0 || row >= len(self.map)):
+			return column,self.presentRow
+
+		if (column < 0 || column >= len(self.map[0]))
+			return self.presentCol,row
+
+	def current_reward(self):
+
+		return self.map[self.presentRow][self.presentCol]
+
+	#Checking if the current position is the goal state 
+	def goalcheck(self):
+
+		if self.map[self.presentRow][self.presentCol] == 10:
+			return True
+
+		else:
+			return False 
+
+
+
 
 
 
