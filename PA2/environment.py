@@ -16,22 +16,25 @@ class puddle_world(Environment):
 	WORLD_GOAL = 10
 	Start_states=[[5,0],[6,0],[10,0],[11,0]]
 	Action_probab = 0.1
-	self.g=0
+	a=0
+	b=0
+	c=10
 
 	def env_init(self):
-		self.map=[  [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, self.g],
+		self.map=[  [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, self.a],
 					[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 ],
-					[0 , 0 , 0 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 , self.g , 0, 0 ],
+					[0 , 0 , 0 ,-1 ,-1 ,-1 ,-1 ,-1 ,-1 , self.b , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-2 ,-2 ,-2 ,-1 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-3 ,-2 ,-1 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-2 ,-2 ,-1 , 0 , 0, 0 ],
-					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-2 , self.g ,-1 , 0 , 0, 0 ],
+					[0 , 0 , 0 ,-1 ,-2 ,-3 ,-2 , self.c ,-1 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-2 ,-2 ,-2 ,-1 , 0 , 0 , 0, 0 ],
 					[0 , 0 , 0 ,-1 ,-1 ,-1 ,-1 ,-1 , 0 , 0 , 0, 0 ],
 					[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 ],
 					[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 ],
 					[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0, 0 ]  ]
-		return 
+		
+		return  "VERSION RL-Glue-3.0 PROBLEMTYPE episodic DISCOUNTFACTOR 0.9 OBSERVATIONS INTS (0 143) ACTIONS INTS (0 3) REWARDS (0 -1 -2 -3 10.0) EXTRA n" 
 
 	def env_start(self):
 
@@ -40,12 +43,13 @@ class puddle_world(Environment):
 		#zero for all the 4 starting states
 		self.presentCol=0
 		self.presentRow=self.Start_states[State][0]
-		returnObs.intArray=[self.calculateFlatState()]
+		returnObs.intArray=[self.rolloutstate()]
 
 		return returnObs
 
 	def env_step(self,thisAction):
 
+		print thisAction.intArray[0]
 		assert len(thisAction.intArray)==1,"Expected 1 integer action."
 		assert thisAction.intArray[0]>=0, "Expected action to be in [0,3]"
 		assert thisAction.intArray[0]<4, "Expected action to be in [0,3]"
@@ -65,12 +69,24 @@ class puddle_world(Environment):
 	def env_cleanup(self):
 		pass
 
+
 	def env_message(self,Message):
 
-		if Message.startswith("set-goalstates"):
-			self.g = Message.split(" ")[1]
-
-
+		if Message.startswith("set-start-state"):
+			k = int(Message.split(" ")[1])
+			if k == 0:
+				self.a = 10
+				self.b = 0
+				self.c = 0
+			if k == 1:
+				self.b = 10
+				self.c = 0
+				self.a = 0
+			if k == 2:
+				self.c = 10
+				self.b = 0
+				self.a = 0
+		print self.a, self.b, self.c
 	#getting the state after making the 2-d list to 1-d
 	def rolloutstate(self):
 
@@ -81,37 +97,43 @@ class puddle_world(Environment):
 	def updatePosition(self,thisAction):
 
 		#To account for the action stochasticity 
-		if random.random() < Action_probab :
+		if random.random() < self.Action_probab :
 			thisAction = random.randint(0,3)
 
 		column = self.presentCol
 		row = self.presentRow
 
-		#move down
-		if(thisAction == 0):
-			column=column + 1;
-
 		#move right
+		if(thisAction == 0):
+			column=column + 1
+
+		#move down
 		if(thisAction == 1):
 			row=row + 1
 		
-		#move up
+		#move left
 		if(thisAction == 2):
 			column=column - 1
-		#move down
+		#move up
 		if(thisAction == 3):
 			row=row - 1
 
 		self.presentCol,self.presentRow = self.finalcheck(column,row)
 
+		if random.random() < 0.5:
+			if self.presentCol < len(self.map[0])-1:
+				self.presentCol = self.presentCol + 1
+
 	#finalising the position after checking whether the agent goes out of bounds
 	def finalcheck(self,column,row):
 		
-		if (row < 0 || row >= len(self.map)):
+		if (row < 0 or row >= len(self.map)):
 			return column,self.presentRow
 
-		if (column < 0 || column >= len(self.map[0]))
+		if (column < 0 or column >= len(self.map[0])):
 			return self.presentCol,row
+
+		return column,row
 
 	def current_reward(self):
 
@@ -126,6 +148,7 @@ class puddle_world(Environment):
 		else:
 			return False 
 
-if __name_ == "__main__":
-	EnvironmentLoader.loadEnvironment(puddle_world)
+
+if __name__ == "__main__":
+	EnvironmentLoader.loadEnvironment(puddle_world())
 

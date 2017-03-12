@@ -11,17 +11,23 @@ from random import Random
 
 class s_agent(Agent):
 
-	learningrate=
-	gamma=
-	epsilon=
+	learningrate = 0.10
+	gamma = 0.9
+	epsilon = 0.1
 
 	def agent_init(self,taskSpecString):
+
+		self.numActions = 4
+		self.numStates = 144
+		self.qfunction = [self.numActions*[0.0] for i in range(self.numStates)]
+		self.lastAction=Action()
+		self.lastObs=Observation()
 
 	def agent_start(self,Obs):
 		State = Obs.intArray[0]
 		action = self.epsilon_greedy(State)
 		returnaction = Action()
-		returnaction.intArray = action
+		returnaction.intArray = [action]
 
 		self.lastaction = copy.deepcopy(returnaction)
 		self.lastObs = copy.deepcopy(Obs)	
@@ -41,11 +47,11 @@ class s_agent(Agent):
 
 		Q_new = Q_sa + self.learningrate*( Reward + self.gamma*Q_saprime - Q_sa)
 		
-		if not self.pause:
-			qfunction[last_state][last_action] = Q_new
+		#if not self.pause:
+		self.qfunction[last_state][last_action] = Q_new
 
 		returnaction = Action()
-		returnaction.intArray = lastaction
+		returnaction.intArray = [new_action]
 
 		self.lastaction = copy.deepcopy(returnaction)
 		self.lastObs = copy.deepcopy(Obs)
@@ -57,7 +63,6 @@ class s_agent(Agent):
 		if random.random() < self.epsilon:
 			return random.randint(0,3)
 		else:
-
 			k=self.qfunction[state].index(max(self.qfunction[state]))
 			return k
 
@@ -68,19 +73,19 @@ class s_agent(Agent):
 		last_state = self.lastObs.intArray[0]
 		last_action = self.lastaction.intArray[0]
 		Q_sa = self.qfunction[last_state][last_action]
-		new_Q_sa=Q_sa + self.sarsa_stepsize * (reward - Q_sa)
+		Q_new=Q_sa + self.learningrate * (Reward - Q_sa)
 
-		if not self.pause:
-			qfunction[last_state][last_action] = Q_new
+		#if not self.pause:
+		self.qfunction[last_state][last_action] = Q_new
 
 	def agent_cleanup(self):
 		pass
 
-	def agent_message(self,Message):
+	#def agent_message(self,Message):
 
-		if Message.startswith(""):
+		#if Message.startswith(""):
 
-		if Message.
+		#if Message.
 
 if __name__ == "__main__":
-	AgentLoader.loadAgent(s_agent)
+	AgentLoader.loadAgent(s_agent())
