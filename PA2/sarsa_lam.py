@@ -15,7 +15,7 @@ class sl_agent(Agent):
 	learningrate = 0.10
 	gamma = 0.9
 	epsilon = 0.1
-	lamda = 
+	lamda = 0.3
 
 	def agent_init(self,taskSpecString):
 
@@ -58,11 +58,10 @@ class sl_agent(Agent):
 		self.qfunction = np.array(self.qfunction)
 		self.efunction = np.array(self.efunction)
 
-		self.qfunction = self.qfunction + self.learningrate*delta*efunction
+		self.qfunction = self.qfunction + self.learningrate*delta*self.efunction
 
 		self.efunction = self.gamma*self.lamda*self.efunction
 		
-		#if not self.pause:
 
 		returnaction = Action()
 		returnaction.intArray = [new_action]
@@ -73,12 +72,12 @@ class sl_agent(Agent):
 		return returnaction
 
 	def epsilon_greedy(self,state):
-
 		if random.random() < self.epsilon:
 			return random.randint(0,3)
 		else:
-			k=self.qfunction[state].index(max(self.qfunction[state]))
-			return k
+			k=np.argmax(self.qfunction[state])
+			print k
+			return int(k)
 
 
 
@@ -95,7 +94,7 @@ class sl_agent(Agent):
 		self.qfunction = np.array(self.qfunction)
 		self.efunction = np.array(self.efunction)
 
-		self.qfunction = self.qfunction + self.learningrate*delta*efunction
+		self.qfunction = self.qfunction + self.learningrate*delta*self.efunction
 
 		self.efunction = self.gamma*self.lamda*self.efunction
 
